@@ -1,0 +1,12 @@
+# Pure utility functions (non-React)
+
+# This directory is empty in Phase 1.
+# Utilities that don't fit in src/lib/ (which contains React-aware utilities)
+# go here. For example:
+#
+#   date.ts    — date formatting (separate from formatDate in lib/utils.ts)
+#   string.ts  — string manipulation utilities
+#   array.ts   — array helpers
+#
+# Prefer lib/utils.ts for small one-off utilities.
+# Move to utils/ only when a utility family grows to 3+ related functions.

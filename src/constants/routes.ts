@@ -1,0 +1,27 @@
+/**
+ * Application route path constants.
+ *
+ * Use these everywhere a URL path is needed (Link, NavLink, navigate(), tests).
+ * Never hardcode path strings outside this file.
+ *
+ * Paths begin with `/` so they can be used directly in <Link to={ROUTES.ABOUT}>.
+ * React Router child route segments (without leading slash) are handled in
+ * src/routes/index.tsx.
+ */
+export const ROUTES = {
+  HOME: '/',
+  ABOUT: '/about',
+  WORK: '/work',
+  WORK_DETAIL: '/work/:slug',
+  ENGINEERING: '/engineering',
+  WRITING: '/writing',
+  RESUME: '/resume',
+  CONTACT: '/contact',
+} as const
+
+export type Route = (typeof ROUTES)[keyof typeof ROUTES]
+
+/** Returns the resolved URL for a project case study. */
+export function workDetailPath(slug: string): string {
+  return `/work/${slug}`
+}

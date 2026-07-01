@@ -1,0 +1,8 @@
+# Custom React hooks
+
+# This directory is empty in Phase 1.
+# Hooks are added as features require them:
+#
+#   Phase 2: use-scroll-position.ts, use-mobile-nav.ts, use-theme.ts
+#   Phase 5: use-reduced-motion.ts
+#   Phase 6: use-active-section.ts, use-copy-to-clipboard.ts
