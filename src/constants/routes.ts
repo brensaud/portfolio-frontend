@@ -17,6 +17,8 @@ export const ROUTES = {
   WRITING: '/writing',
   RESUME: '/resume',
   CONTACT: '/contact',
+  ARCHITECTURE: '/architecture',
+  PROJECT_ARCHITECTURE: '/projects/:slug/architecture',
 } as const
 
 export type Route = (typeof ROUTES)[keyof typeof ROUTES]
@@ -24,4 +26,9 @@ export type Route = (typeof ROUTES)[keyof typeof ROUTES]
 /** Returns the resolved URL for a project case study. */
 export function workDetailPath(slug: string): string {
   return `/work/${slug}`
+}
+
+/** Returns the resolved URL for a project architecture explorer. */
+export function projectArchitecturePath(slug: string): string {
+  return `/projects/${slug}/architecture`
 }

@@ -9,6 +9,8 @@ import { EngineeringPage } from '@/pages/engineering-page'
 import { BlogPage } from '@/pages/blog-page'
 import { ResumePage } from '@/pages/resume-page'
 import { ContactPage } from '@/pages/contact-page'
+import { ArchitecturePage } from '@/pages/architecture-page'
+import { ProjectArchitecturePage } from '@/pages/project-architecture-page'
 import { NotFoundPage } from '@/pages/not-found-page'
 
 /**
@@ -37,6 +39,8 @@ export const routes: RouteObject[] = [
       { path: 'writing', element: <BlogPage /> },
       { path: 'resume', element: <ResumePage /> },
       { path: 'contact', element: <ContactPage /> },
+      { path: 'architecture', element: <ArchitecturePage /> },
+      { path: 'projects/:slug/architecture', element: <ProjectArchitecturePage /> },
       // Catch-all: handles any path not matched by the routes above
       { path: '*', element: <NotFoundPage /> },
     ],
