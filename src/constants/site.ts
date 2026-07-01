@@ -7,16 +7,16 @@
  * TODO Phase 4: Replace placeholder values with real content.
  */
 export const SITE_META = {
-  name: 'Your Name', // TODO: Replace with real name
+  name: 'Bren Saud',
   role: 'Python Backend Engineer',
   tagline: 'Building production-grade backend systems and AI products.',
   description:
     'Python Backend Engineer and AI systems builder. Writing about distributed systems, ' +
     'FastAPI, and engineering craft.',
-  github: 'https://github.com/username', // TODO: Replace
-  linkedin: 'https://linkedin.com/in/username', // TODO: Replace
-  email: 'hello@example.com', // TODO: Replace
-  twitterHandle: '@username', // TODO: Replace
+  github: 'https://github.com/brensaud',
+  linkedin: 'https://linkedin.com/in/username', // TODO: Replace with real LinkedIn
+  email: 'hello@example.com', // TODO: Replace with real email
+  twitterHandle: '@username', // TODO: Replace with real handle
 } as const
 
 /**
