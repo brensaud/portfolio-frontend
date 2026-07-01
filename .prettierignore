@@ -1,0 +1,15 @@
+# Directories
+node_modules
+dist
+.velite
+coverage
+playwright-report
+test-results
+
+# Generated files
+pnpm-lock.yaml
+*.min.js
+*.min.css
+
+# Config files that don't need formatting
+*.json

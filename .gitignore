@@ -1,0 +1,50 @@
+# =============================================================================
+# .gitignore — Portfolio Frontend
+# =============================================================================
+
+# ─── Dependencies ────────────────────────────────────────────────────────────
+node_modules/
+
+# ─── Build outputs ───────────────────────────────────────────────────────────
+dist/
+dist-ssr/
+
+# ─── Logs ────────────────────────────────────────────────────────────────────
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# ─── Environment (NEVER commit secrets) ──────────────────────────────────────
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+# .env.example is intentionally NOT listed — it must be committed
+
+*.local
+
+# ─── TypeScript ──────────────────────────────────────────────────────────────
+node_modules/.tmp/
+
+# ─── Content layer (Velite — Phase 4) ────────────────────────────────────────
+.velite/
+
+# ─── Test outputs ────────────────────────────────────────────────────────────
+coverage/
+playwright-report/
+test-results/
+blob-report/
+
+# ─── Editor directories and files
+.vscode/*
+!.vscode/extensions.json
+.idea
+.DS_Store
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?

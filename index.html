@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Portfolio</title>
+    <!--
+      FOUC (Flash Of Unstyled Content) prevention.
+      This script runs synchronously before any CSS or JavaScript loads,
+      reading the stored theme preference and applying it to <html> immediately.
+      Without this, users who chose "light" would see a dark flash on every reload.
+
+      IMPORTANT: The localStorage key 'portfolio-theme' must stay in sync with
+      the THEME_STORAGE_KEY constant in src/components/layout/theme-provider.tsx.
+    -->
+    <script>
+      (function () {
+        try {
+          var stored = localStorage.getItem('portfolio-theme')
+          var prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches
+          // Priority: 1) explicit user choice, 2) OS preference, 3) dark (default)
+          var theme =
+            stored === 'light' || stored === 'dark'
+              ? stored
+              : prefersDark
+                ? 'dark'
+                : 'light'
+          document.documentElement.setAttribute('data-theme', theme)
+        } catch (_) {
+          // localStorage may be blocked in private browsing or sandboxed environments.
+          // Default to dark — the design system is dark-first.
+          document.documentElement.setAttribute('data-theme', 'dark')
+        }
+      })()
+    </script>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>
