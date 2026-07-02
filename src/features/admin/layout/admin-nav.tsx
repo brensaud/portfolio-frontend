@@ -1,21 +1,22 @@
 /**
- * AdminNav — minimal top bar for the admin shell.
+ * AdminNav — top bar for the admin shell.
  *
- * Sprint 1 scope: shows the admin email and a Logout button.
- * Future sprints will add navigation links as admin sections are built.
+ * Sprint 1 scope: brand + logout button.
+ * Sprint 2: added Contact Messages navigation link.
  */
 
-import { LogOut, Shield } from 'lucide-react'
+import { LogOut, Mail, Shield } from 'lucide-react'
+import { NavLink } from 'react-router-dom'
 import { useAdminAuth } from '@/features/admin/auth/admin-auth-context'
 import { Button } from '@/components/ui/button'
+import { ADMIN_ROUTES } from '@/constants/routes'
+import { cn } from '@/lib/utils'
 
 export function AdminNav() {
   const { admin, logout } = useAdminAuth()
 
   async function handleLogout() {
     await logout()
-    // Navigation back to /admin/login is handled by RequireAdmin after the
-    // context status transitions to 'unauthenticated'.
   }
 
   return (
@@ -25,6 +26,24 @@ export function AdminNav() {
         <Shield size={16} className="text-accent" aria-hidden="true" />
         Admin
       </div>
+
+      {/* Nav links */}
+      <nav className="ml-6 flex items-center gap-1" aria-label="Admin navigation">
+        <NavLink
+          to={ADMIN_ROUTES.CONTACT_MESSAGES}
+          className={({ isActive }) =>
+            cn(
+              'flex items-center gap-1.5 rounded-md px-3 py-1.5 text-sm transition-colors',
+              isActive
+                ? 'bg-surface-raised text-text-primary'
+                : 'text-text-secondary hover:text-text-primary',
+            )
+          }
+        >
+          <Mail size={14} aria-hidden="true" />
+          Messages
+        </NavLink>
+      </nav>
 
       {/* Spacer */}
       <div className="flex-1" />

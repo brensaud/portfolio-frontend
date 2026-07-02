@@ -28,6 +28,7 @@ export const ROUTES = {
 export const ADMIN_ROUTES = {
   LOGIN: '/admin/login',
   DASHBOARD: '/admin/dashboard',
+  CONTACT_MESSAGES: '/admin/contact-messages',
   ROOT: '/admin',
 } as const
 

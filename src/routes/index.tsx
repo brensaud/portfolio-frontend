@@ -14,6 +14,7 @@ import { ProjectArchitecturePage } from '@/pages/project-architecture-page'
 import { NotFoundPage } from '@/pages/not-found-page'
 import { AdminLoginPage } from '@/pages/admin/admin-login-page'
 import { AdminDashboardPage } from '@/pages/admin/admin-dashboard-page'
+import { AdminContactMessagesPage } from '@/pages/admin/admin-contact-messages-page'
 import { AdminLayout } from '@/features/admin/layout/admin-layout'
 import { RequireAdmin } from '@/features/admin/shared/require-admin'
 import { ADMIN_ROUTES } from '@/constants/routes'
@@ -72,6 +73,7 @@ export const routes: RouteObject[] = [
       // /admin → redirect to /admin/dashboard
       { index: true, element: <Navigate to={ADMIN_ROUTES.DASHBOARD} replace /> },
       { path: 'dashboard', element: <AdminDashboardPage /> },
+      { path: 'contact-messages', element: <AdminContactMessagesPage /> },
       // Catch-all for future /admin/* routes not yet implemented
       { path: '*', element: <Navigate to={ADMIN_ROUTES.DASHBOARD} replace /> },
     ],
