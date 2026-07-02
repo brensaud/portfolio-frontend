@@ -236,11 +236,6 @@ export function ContactMessageDetail({ messageId, onClose }: ContactMessageDetai
             {data && (
               <DetailContent
                 message={data}
-                onMarkRead={handleMarkRead}
-                onMarkUnread={handleMarkUnread}
-                onArchive={handleArchive}
-                onDelete={() => setShowDeleteConfirm(true)}
-                isPending={isPending}
               />
             )}
           </div>

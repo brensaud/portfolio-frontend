@@ -161,7 +161,7 @@ export function AdminLoginForm() {
           value={fields.email}
           onChange={handleChange('email')}
           isError={!!fieldErrors.email}
-          errorMessage={fieldErrors.email}
+          {...(fieldErrors.email ? { errorMessage: fieldErrors.email } : {})}
           disabled={isSubmitting}
           placeholder="admin@example.com"
         />
@@ -182,7 +182,7 @@ export function AdminLoginForm() {
           value={fields.password}
           onChange={handleChange('password')}
           isError={!!fieldErrors.password}
-          errorMessage={fieldErrors.password}
+          {...(fieldErrors.password ? { errorMessage: fieldErrors.password } : {})}
           disabled={isSubmitting}
           placeholder="••••••••"
         />

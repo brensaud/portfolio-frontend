@@ -27,7 +27,6 @@ import { screen, waitFor } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { render } from '@testing-library/react'
 import { MemoryRouter } from 'react-router-dom'
-import { type ReactNode } from 'react'
 import { AdminLoginForm } from '@/features/admin/auth/login-form'
 import { AdminApiError, AdminNetworkError } from '@/lib/admin-api'
 import { useAdminAuth } from '@/features/admin/auth/admin-auth-context'
@@ -41,10 +40,10 @@ vi.mock('@/features/admin/auth/admin-auth-context', () => ({
 
 // Mock react-router-dom's useNavigate so we can assert navigation calls.
 const mockNavigate = vi.fn()
-vi.mock('react-router-dom', async (importActual) => {
-  const actual = await importActual<typeof import('react-router-dom')>()
+vi.mock('react-router-dom', async () => {
+  const actual = await vi.importActual('react-router-dom')
   return {
-    ...actual,
+    ...(actual as object),
     useNavigate: () => mockNavigate,
   }
 })

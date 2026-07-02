@@ -34,8 +34,10 @@ export function useContactMessages(params: UseContactMessagesParams) {
       adminGetContactMessages({
         page: params.page,
         page_size: params.pageSize,
-        status: params.status ?? undefined,
-        search: params.search || undefined,
+        // Pass null directly — adminGetContactMessages skips the param when falsy.
+        // Do NOT coerce to undefined: exactOptionalPropertyTypes forbids it.
+        status: params.status,
+        ...(params.search ? { search: params.search } : {}),
         sort: params.sort,
       }),
     placeholderData: keepPreviousData,
