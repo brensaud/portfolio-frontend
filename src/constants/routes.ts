@@ -21,6 +21,16 @@ export const ROUTES = {
   PROJECT_ARCHITECTURE: '/projects/:slug/architecture',
 } as const
 
+/**
+ * Admin routes — private, behind HTTPOnly cookie auth.
+ * These routes are served under a separate layout (no public navbar/footer).
+ */
+export const ADMIN_ROUTES = {
+  LOGIN: '/admin/login',
+  DASHBOARD: '/admin/dashboard',
+  ROOT: '/admin',
+} as const
+
 export type Route = (typeof ROUTES)[keyof typeof ROUTES]
 
 /** Returns the resolved URL for a project case study. */
