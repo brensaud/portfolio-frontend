@@ -151,3 +151,115 @@ export async function adminRefresh(): Promise<Pick<AdminInfo, 'expires_at'> | nu
     throw err
   }
 }
+
+// ─── Contact messages ─────────────────────────────────────────────────────────
+
+export type ContactMessageStatus = 'unread' | 'read' | 'archived'
+
+export type ContactMessageSort = 'created_at_desc' | 'created_at_asc'
+
+/** Compact shape returned by the list endpoint (no message body). */
+export interface AdminContactMessageSummary {
+  id: string
+  name: string
+  email: string
+  subject: string
+  status: ContactMessageStatus
+  created_at: string // ISO 8601
+  updated_at: string // ISO 8601
+}
+
+/** Full shape returned by the detail and mutation endpoints. */
+export interface AdminContactMessageDetail extends AdminContactMessageSummary {
+  message: string
+  ip_address: string | null
+  user_agent: string | null
+}
+
+/** Pagination envelope from GET /admin/api/contact-messages. */
+export interface ContactMessagesPage {
+  items: AdminContactMessageSummary[]
+  total: number
+  page: number
+  page_size: number
+  pages: number
+}
+
+export interface ContactMessagesQuery {
+  page?: number
+  page_size?: number
+  status?: ContactMessageStatus | null
+  search?: string
+  sort?: ContactMessageSort
+}
+
+/**
+ * GET /admin/api/contact-messages
+ *
+ * Returns a paginated, filtered list of contact messages.
+ */
+export async function adminGetContactMessages(
+  query: ContactMessagesQuery = {},
+): Promise<ContactMessagesPage> {
+  const params = new URLSearchParams()
+  if (query.page != null) params.set('page', String(query.page))
+  if (query.page_size != null) params.set('page_size', String(query.page_size))
+  if (query.status) params.set('status', query.status)
+  if (query.search?.trim()) params.set('search', query.search.trim())
+  if (query.sort) params.set('sort', query.sort)
+
+  const qs = params.toString()
+  const res = await adminFetch(`/admin/api/contact-messages${qs ? `?${qs}` : ''}`)
+  return res.json() as Promise<ContactMessagesPage>
+}
+
+/**
+ * GET /admin/api/contact-messages/{id}
+ *
+ * Fetches a single message.  Side-effect: auto-marks unread → read.
+ */
+export async function adminGetContactMessage(
+  id: string,
+): Promise<AdminContactMessageDetail> {
+  const res = await adminFetch(`/admin/api/contact-messages/${id}`)
+  return res.json() as Promise<AdminContactMessageDetail>
+}
+
+/**
+ * PATCH /admin/api/contact-messages/{id}/read
+ */
+export async function adminMarkRead(id: string): Promise<AdminContactMessageDetail> {
+  const res = await adminFetch(`/admin/api/contact-messages/${id}/read`, {
+    method: 'PATCH',
+  })
+  return res.json() as Promise<AdminContactMessageDetail>
+}
+
+/**
+ * PATCH /admin/api/contact-messages/{id}/unread
+ */
+export async function adminMarkUnread(id: string): Promise<AdminContactMessageDetail> {
+  const res = await adminFetch(`/admin/api/contact-messages/${id}/unread`, {
+    method: 'PATCH',
+  })
+  return res.json() as Promise<AdminContactMessageDetail>
+}
+
+/**
+ * PATCH /admin/api/contact-messages/{id}/archive
+ */
+export async function adminArchiveMessage(id: string): Promise<AdminContactMessageDetail> {
+  const res = await adminFetch(`/admin/api/contact-messages/${id}/archive`, {
+    method: 'PATCH',
+  })
+  return res.json() as Promise<AdminContactMessageDetail>
+}
+
+/**
+ * DELETE /admin/api/contact-messages/{id}
+ *
+ * Permanently deletes a message.  Returns nothing on success (204).
+ */
+export async function adminDeleteMessage(id: string): Promise<void> {
+  await adminFetch(`/admin/api/contact-messages/${id}`, { method: 'DELETE' })
+}
