@@ -32,10 +32,6 @@ export interface LoginPayload {
   password: string
 }
 
-export interface SessionsInfo {
-  active_sessions: number
-}
-
 // ─── Error classes ────────────────────────────────────────────────────────────
 
 export class AdminApiError extends Error {
