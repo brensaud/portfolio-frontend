@@ -26,6 +26,10 @@ pnpm-debug.log*
 
 *.local
 
+# envs/ folder — all files except the committed template
+envs/*
+!envs/.env.example
+
 # ─── TypeScript ──────────────────────────────────────────────────────────────
 node_modules/.tmp/
 

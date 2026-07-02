@@ -20,6 +20,21 @@ export const config = {
 
   /** True when running in a production build. */
   isProd: import.meta.env.PROD,
+
+  /**
+   * Base URL for the public portfolio API.
+   * Set VITE_API_BASE_URL in .env.local / Vercel environment settings.
+   */
+  apiBase: (import.meta.env['VITE_API_BASE_URL'] as string | undefined) ?? 'http://localhost:8000',
+
+  /**
+   * Base URL for the private admin API.
+   * Defaults to the same origin as the public API.
+   * Override with VITE_ADMIN_API_BASE_URL if the admin API is hosted separately.
+   */
+  adminApiBase: (import.meta.env['VITE_ADMIN_API_BASE_URL'] as string | undefined)
+    ?? (import.meta.env['VITE_API_BASE_URL'] as string | undefined)
+    ?? 'http://localhost:8000',
 } as const
 
 export type Config = typeof config

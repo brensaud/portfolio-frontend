@@ -1,5 +1,6 @@
 import { type ReactNode } from 'react'
 import { ThemeProvider } from '@/components/layout/theme-provider'
+import { AdminAuthProvider } from '@/features/admin/auth/admin-auth-context'
 
 interface AppProvidersProps {
   children: ReactNode
@@ -13,8 +14,14 @@ interface AppProvidersProps {
  *
  * Phase history:
  *   Phase 2: ThemeProvider added (dark/light mode)
- *   Phase 5+: QueryClientProvider (if server state is needed)
+ *   Sprint 1 Admin: AdminAuthProvider added (admin session state)
  */
 export function AppProviders({ children }: AppProvidersProps) {
-  return <ThemeProvider>{children}</ThemeProvider>
+  return (
+    <ThemeProvider>
+      <AdminAuthProvider>
+        {children}
+      </AdminAuthProvider>
+    </ThemeProvider>
+  )
 }
