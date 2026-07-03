@@ -22,9 +22,22 @@ export interface UseContactMessagesParams {
   sort: ContactMessageSort
 }
 
-/** Stable query key factory — all list queries share the 'contact-messages' namespace. */
+/** Stable query key factory — all list queries share the 'contact-messages' namespace.
+ *
+ * contactMessagesKey()        → ['admin', 'contact-messages']
+ *   Used in invalidateQueries — matches ALL contact-messages queries (list + detail).
+ *
+ * contactMessagesKey(params)  → ['admin', 'contact-messages', params]
+ *   Used as a unique list query key (each filter/page combination is distinct).
+ */
+export function contactMessagesKey(): readonly ['admin', 'contact-messages']
+export function contactMessagesKey(
+  params: Partial<UseContactMessagesParams>,
+): readonly ['admin', 'contact-messages', Partial<UseContactMessagesParams>]
 export function contactMessagesKey(params?: Partial<UseContactMessagesParams>) {
-  return ['admin', 'contact-messages', params ?? {}] as const
+  return params !== undefined
+    ? (['admin', 'contact-messages', params] as const)
+    : (['admin', 'contact-messages'] as const)
 }
 
 export function useContactMessages(params: UseContactMessagesParams) {

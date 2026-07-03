@@ -37,11 +37,24 @@ function toastError(err: unknown, fallback: string) {
 
 // ── Hooks ─────────────────────────────────────────────────────────────────────
 
+/**
+ * Update the detail query cache immediately using the mutation response.
+ * This avoids a stale dialog when the user marks a message read/unread
+ * while the detail panel is still open.
+ */
+function updateDetailCache(
+  qc: ReturnType<typeof useQueryClient>,
+  updated: AdminContactMessageDetail,
+) {
+  qc.setQueryData(['admin', 'contact-messages', updated.id], updated)
+}
+
 export function useMarkRead() {
   const qc = useQueryClient()
   return useMutation<AdminContactMessageDetail, unknown, string>({
     mutationFn: adminMarkRead,
-    onSuccess: () => {
+    onSuccess: (updated) => {
+      updateDetailCache(qc, updated)
       void qc.invalidateQueries({ queryKey: contactMessagesKey() })
       toast.success('Marked as read.')
     },
@@ -53,7 +66,8 @@ export function useMarkUnread() {
   const qc = useQueryClient()
   return useMutation<AdminContactMessageDetail, unknown, string>({
     mutationFn: adminMarkUnread,
-    onSuccess: () => {
+    onSuccess: (updated) => {
+      updateDetailCache(qc, updated)
       void qc.invalidateQueries({ queryKey: contactMessagesKey() })
       toast.success('Marked as unread.')
     },
@@ -65,7 +79,8 @@ export function useArchiveMessage() {
   const qc = useQueryClient()
   return useMutation<AdminContactMessageDetail, unknown, string>({
     mutationFn: adminArchiveMessage,
-    onSuccess: () => {
+    onSuccess: (updated) => {
+      updateDetailCache(qc, updated)
       void qc.invalidateQueries({ queryKey: contactMessagesKey() })
       toast.success('Message archived.')
     },
@@ -78,6 +93,7 @@ export function useDeleteMessage() {
   return useMutation<void, unknown, string>({
     mutationFn: adminDeleteMessage,
     onSuccess: () => {
+      // No setQueryData on delete — the row no longer exists.
       void qc.invalidateQueries({ queryKey: contactMessagesKey() })
       toast.success('Message permanently deleted.')
     },
