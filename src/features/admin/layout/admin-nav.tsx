@@ -5,7 +5,7 @@
  * Sprint 2: added Contact Messages navigation link.
  */
 
-import { LogOut, Mail, Shield } from 'lucide-react'
+import { LogOut, Mail, PenLine, Shield } from 'lucide-react'
 import { NavLink } from 'react-router-dom'
 import { useAdminAuth } from '@/features/admin/auth/admin-auth-context'
 import { Button } from '@/components/ui/button'
@@ -42,6 +42,20 @@ export function AdminNav() {
         >
           <Mail size={14} aria-hidden="true" />
           Messages
+        </NavLink>
+        <NavLink
+          to={ADMIN_ROUTES.ARTICLES}
+          className={({ isActive }) =>
+            cn(
+              'flex items-center gap-1.5 rounded-md px-3 py-1.5 text-sm transition-colors',
+              isActive
+                ? 'bg-surface-raised text-text-primary'
+                : 'text-text-secondary hover:text-text-primary',
+            )
+          }
+        >
+          <PenLine size={14} aria-hidden="true" />
+          Articles
         </NavLink>
       </nav>
 

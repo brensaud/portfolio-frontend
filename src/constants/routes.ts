@@ -15,6 +15,7 @@ export const ROUTES = {
   WORK_DETAIL: '/work/:slug',
   ENGINEERING: '/engineering',
   WRITING: '/writing',
+  WRITING_DETAIL: '/writing/:slug',
   RESUME: '/resume',
   CONTACT: '/contact',
   ARCHITECTURE: '/architecture',
@@ -29,6 +30,7 @@ export const ADMIN_ROUTES = {
   LOGIN: '/admin/login',
   DASHBOARD: '/admin/dashboard',
   CONTACT_MESSAGES: '/admin/contact-messages',
+  ARTICLES: '/admin/articles',
   ROOT: '/admin',
 } as const
 
@@ -37,6 +39,11 @@ export type Route = (typeof ROUTES)[keyof typeof ROUTES]
 /** Returns the resolved URL for a project case study. */
 export function workDetailPath(slug: string): string {
   return `/work/${slug}`
+}
+
+/** Returns the resolved URL for a writing article detail page. */
+export function writingDetailPath(slug: string): string {
+  return `/writing/${slug}`
 }
 
 /** Returns the resolved URL for a project architecture explorer. */

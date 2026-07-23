@@ -263,3 +263,131 @@ export async function adminArchiveMessage(id: string): Promise<AdminContactMessa
 export async function adminDeleteMessage(id: string): Promise<void> {
   await adminFetch(`/admin/api/contact-messages/${id}`, { method: 'DELETE' })
 }
+
+// ─── Articles ─────────────────────────────────────────────────────────────────
+
+export type AdminArticleStatus = 'draft' | 'published' | 'archived'
+export type AdminArticleSort = 'created_at_desc' | 'created_at_asc' | 'published_at_desc'
+
+/** Compact shape returned by the admin list — no body. */
+export interface AdminArticleSummary {
+  id: string
+  slug: string
+  title: string
+  summary: string
+  category: string
+  status: AdminArticleStatus
+  tags: string[]
+  reading_time_minutes: number | null
+  featured: boolean
+  published_at: string | null
+  created_at: string
+  updated_at: string
+}
+
+/** Full shape returned by the editor and mutation endpoints. */
+export interface AdminArticleDetail extends AdminArticleSummary {
+  body: string | null
+}
+
+export interface AdminArticlesPage {
+  items: AdminArticleSummary[]
+  total: number
+  page: number
+  page_size: number
+  pages: number
+}
+
+export interface AdminArticlesQuery {
+  page?: number
+  page_size?: number
+  status?: AdminArticleStatus | null
+  search?: string
+  sort?: AdminArticleSort
+}
+
+export interface ArticleCreatePayload {
+  title: string
+  summary: string
+  body?: string | null
+  category: string
+  tags?: string[]
+  featured?: boolean
+}
+
+export interface ArticleUpdatePayload {
+  title?: string
+  summary?: string
+  body?: string | null
+  category?: string
+  tags?: string[]
+  featured?: boolean
+}
+
+/** GET /admin/api/articles */
+export async function adminGetArticles(
+  query: AdminArticlesQuery = {},
+): Promise<AdminArticlesPage> {
+  const params = new URLSearchParams()
+  if (query.page != null) params.set('page', String(query.page))
+  if (query.page_size != null) params.set('page_size', String(query.page_size))
+  if (query.status) params.set('status', query.status)
+  if (query.search?.trim()) params.set('search', query.search.trim())
+  if (query.sort) params.set('sort', query.sort)
+
+  const qs = params.toString()
+  const res = await adminFetch(`/admin/api/articles${qs ? `?${qs}` : ''}`)
+  return res.json() as Promise<AdminArticlesPage>
+}
+
+/** GET /admin/api/articles/{id} */
+export async function adminGetArticle(id: string): Promise<AdminArticleDetail> {
+  const res = await adminFetch(`/admin/api/articles/${id}`)
+  return res.json() as Promise<AdminArticleDetail>
+}
+
+/** POST /admin/api/articles */
+export async function adminCreateArticle(
+  payload: ArticleCreatePayload,
+): Promise<AdminArticleDetail> {
+  const res = await adminFetch('/admin/api/articles', {
+    method: 'POST',
+    body: JSON.stringify(payload),
+  })
+  return res.json() as Promise<AdminArticleDetail>
+}
+
+/** PUT /admin/api/articles/{id} */
+export async function adminUpdateArticle(
+  id: string,
+  payload: ArticleUpdatePayload,
+): Promise<AdminArticleDetail> {
+  const res = await adminFetch(`/admin/api/articles/${id}`, {
+    method: 'PUT',
+    body: JSON.stringify(payload),
+  })
+  return res.json() as Promise<AdminArticleDetail>
+}
+
+/** PATCH /admin/api/articles/{id}/publish */
+export async function adminPublishArticle(id: string): Promise<AdminArticleDetail> {
+  const res = await adminFetch(`/admin/api/articles/${id}/publish`, { method: 'PATCH' })
+  return res.json() as Promise<AdminArticleDetail>
+}
+
+/** PATCH /admin/api/articles/{id}/unpublish */
+export async function adminUnpublishArticle(id: string): Promise<AdminArticleDetail> {
+  const res = await adminFetch(`/admin/api/articles/${id}/unpublish`, { method: 'PATCH' })
+  return res.json() as Promise<AdminArticleDetail>
+}
+
+/** PATCH /admin/api/articles/{id}/archive */
+export async function adminArchiveArticle(id: string): Promise<AdminArticleDetail> {
+  const res = await adminFetch(`/admin/api/articles/${id}/archive`, { method: 'PATCH' })
+  return res.json() as Promise<AdminArticleDetail>
+}
+
+/** DELETE /admin/api/articles/{id} */
+export async function adminDeleteArticle(id: string): Promise<void> {
+  await adminFetch(`/admin/api/articles/${id}`, { method: 'DELETE' })
+}

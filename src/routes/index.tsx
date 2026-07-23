@@ -12,9 +12,11 @@ import { ContactPage } from '@/pages/contact-page'
 import { ArchitecturePage } from '@/pages/architecture-page'
 import { ProjectArchitecturePage } from '@/pages/project-architecture-page'
 import { NotFoundPage } from '@/pages/not-found-page'
+import { ArticleDetailPage } from '@/pages/article-detail-page'
 import { AdminLoginPage } from '@/pages/admin/admin-login-page'
 import { AdminDashboardPage } from '@/pages/admin/admin-dashboard-page'
 import { AdminContactMessagesPage } from '@/pages/admin/admin-contact-messages-page'
+import { AdminArticlesPage } from '@/pages/admin/admin-articles-page'
 import { AdminLayout } from '@/features/admin/layout/admin-layout'
 import { RequireAdmin } from '@/features/admin/shared/require-admin'
 import { ADMIN_ROUTES } from '@/constants/routes'
@@ -45,6 +47,7 @@ export const routes: RouteObject[] = [
       { path: 'work/:slug', element: <ProjectDetailPage /> },
       { path: 'engineering', element: <EngineeringPage /> },
       { path: 'writing', element: <BlogPage /> },
+      { path: 'writing/:slug', element: <ArticleDetailPage /> },
       { path: 'resume', element: <ResumePage /> },
       { path: 'contact', element: <ContactPage /> },
       { path: 'architecture', element: <ArchitecturePage /> },
@@ -74,6 +77,7 @@ export const routes: RouteObject[] = [
       { index: true, element: <Navigate to={ADMIN_ROUTES.DASHBOARD} replace /> },
       { path: 'dashboard', element: <AdminDashboardPage /> },
       { path: 'contact-messages', element: <AdminContactMessagesPage /> },
+      { path: 'articles', element: <AdminArticlesPage /> },
       // Catch-all for future /admin/* routes not yet implemented
       { path: '*', element: <Navigate to={ADMIN_ROUTES.DASHBOARD} replace /> },
     ],
