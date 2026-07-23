@@ -1,21 +1,50 @@
 /**
  * FeaturedArticle — §2: promoted article card for the /writing page.
  *
- * Renders the single article with `featured: true` as a larger, accented
- * card. Since no articles are published yet, shows a clear "In progress"
- * status and does not link to a non-existent detail page.
+ * Sprint 3: migrated from static data to React Query fetch.
+ * Renders the single article with featured=true from the published articles.
+ * Returns null if no featured published article exists.
  */
-import { Clock, Pencil } from 'lucide-react'
-import { ARTICLES, ARTICLE_STATUS_VARIANT } from '@/data/articles'
+import { Link } from 'react-router-dom'
+import { useQuery } from '@tanstack/react-query'
+import { Clock, ArrowRight } from 'lucide-react'
+import { getArticles } from '@/lib/articles-api'
+import { writingDetailPath } from '@/constants/routes'
 import { Section } from '@/components/ui/section'
 import { Container } from '@/components/ui/container'
 import { Badge } from '@/components/ui/badge'
+import { Skeleton } from '@/components/ui/skeleton'
 
 export function FeaturedArticle() {
-  const article = ARTICLES.find(a => a.featured)
-  if (!article) return null
+  const { data, isLoading } = useQuery({
+    queryKey: ['articles', { featured: true }],
+    queryFn: () => getArticles({ featured: true, page_size: 1 }),
+    staleTime: 60_000,
+  })
 
-  const statusVariant = ARTICLE_STATUS_VARIANT[article.status]
+  const article = data?.items[0]
+
+  // Loading skeleton
+  if (isLoading) {
+    return (
+      <Section id="featured-article" className="bg-surface">
+        <Container>
+          <p className="mb-6 text-xs font-semibold uppercase tracking-widest text-text-tertiary">
+            Featured article
+          </p>
+          <div className="rounded-2xl border border-accent/25 bg-accent-subtle p-8 sm:p-10 space-y-4">
+            <div className="flex gap-2"><Skeleton variant="text" className="w-20" /></div>
+            <Skeleton variant="text" className="w-3/4 h-8" />
+            <Skeleton variant="text" className="w-full" />
+            <Skeleton variant="text" className="w-2/3" />
+          </div>
+        </Container>
+      </Section>
+    )
+  }
+
+  // No featured article published — section hidden
+  if (!article) return null
 
   return (
     <Section
@@ -24,15 +53,14 @@ export function FeaturedArticle() {
       className="bg-surface"
     >
       <Container>
-        {/* Section label */}
         <p className="mb-6 text-xs font-semibold uppercase tracking-widest text-text-tertiary">
           Featured article
         </p>
 
-        {/* Featured card */}
-        <article
+        <Link
+          to={writingDetailPath(article.slug)}
           aria-labelledby="featured-article-title"
-          className="relative overflow-hidden rounded-2xl border border-accent/25 bg-accent-subtle p-8 sm:p-10"
+          className="group relative block overflow-hidden rounded-2xl border border-accent/25 bg-accent-subtle p-8 transition-colors hover:border-accent/50 sm:p-10"
         >
           {/* Subtle radial decoration */}
           <div
@@ -43,50 +71,49 @@ export function FeaturedArticle() {
           {/* Meta row */}
           <div className="relative mb-5 flex flex-wrap items-center gap-3">
             <Badge variant="accent" size="sm">{article.category}</Badge>
-            <Badge variant={statusVariant} size="sm">{article.status}</Badge>
-            <span className="flex items-center gap-1.5 text-xs text-text-tertiary">
-              <Clock size={12} aria-hidden />
-              {article.readingTime}
-            </span>
+            {article.reading_time_minutes && (
+              <span className="flex items-center gap-1.5 text-xs text-text-tertiary">
+                <Clock size={12} aria-hidden />
+                {article.reading_time_minutes} min read
+              </span>
+            )}
           </div>
 
           {/* Title */}
           <h2
             id="featured-article-title"
-            className="relative mb-4 max-w-2xl text-2xl font-bold leading-snug tracking-tight text-text-primary sm:text-3xl"
+            className="relative mb-4 max-w-2xl text-2xl font-bold leading-snug tracking-tight text-text-primary group-hover:text-accent sm:text-3xl"
           >
             {article.title}
           </h2>
 
-          {/* Description */}
+          {/* Summary */}
           <p className="relative mb-6 max-w-2xl text-base leading-relaxed text-text-secondary">
-            {article.description}
+            {article.summary}
           </p>
 
           {/* Tags */}
-          <ul
-            className="relative mb-8 flex flex-wrap gap-2"
-            aria-label={`Tags for ${article.title}`}
-          >
-            {article.tags.map(tag => (
-              <li key={tag}>
-                <span className="rounded-md border border-accent/20 bg-accent/10 px-2.5 py-1 text-xs font-medium text-accent">
-                  {tag}
-                </span>
-              </li>
-            ))}
-          </ul>
+          {article.tags.length > 0 && (
+            <ul
+              className="relative mb-8 flex flex-wrap gap-2"
+              aria-label={`Tags for ${article.title}`}
+            >
+              {article.tags.map(tag => (
+                <li key={tag}>
+                  <span className="rounded-md border border-accent/20 bg-accent/10 px-2.5 py-1 text-xs font-medium text-accent">
+                    {tag}
+                  </span>
+                </li>
+              ))}
+            </ul>
+          )}
 
-          {/* CTA — shown as status indicator since article is not yet published */}
-          <div className="relative flex items-center gap-3">
-            <span className="flex items-center gap-2 text-sm font-medium text-accent">
-              <Pencil size={14} aria-hidden />
-              {article.status === 'In progress'
-                ? 'Currently being written'
-                : 'Publishing soon'}
-            </span>
+          {/* CTA */}
+          <div className="relative flex items-center gap-2 text-sm font-medium text-accent">
+            Read article
+            <ArrowRight size={14} aria-hidden />
           </div>
-        </article>
+        </Link>
       </Container>
     </Section>
   )
